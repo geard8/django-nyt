@@ -2,6 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import six
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -244,6 +245,29 @@ class Notification(models.Model):
             'times with no intermediate notifications'
         ),
     )
+
+    #: User that triggers the creation of this notifications
+    # If a user is deleted, remove all notifications (CASCADE)
+    trigged_by_user = models.ForeignKey(
+        settings.USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_("user"),
+        related_name='nyt_notifications_trigged',
+    )
+
+    activity = models.CharField(
+        max_length=128,
+        verbose_name=_('notification activity'),
+        blank=True,
+        null=True
+    )
+
+    # Below the mandatory fields for generic relation
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
 
     def save(self, *args, **kwargs):
         assert self.user or self.subscription
