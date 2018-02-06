@@ -265,8 +265,8 @@ class Notification(models.Model):
     )
 
     # Below the mandatory fields for generic relation
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.SET_NULL)
+    object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = GenericForeignKey()
 
     def save(self, *args, **kwargs):
