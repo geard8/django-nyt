@@ -9,7 +9,8 @@ from . import models
 from . import settings
 
 
-def notify(message, key, target_object=None, url=None, filter_exclude={}, recipient_users=None):
+def notify(message, key, target_object=None, url=None, filter_exclude={}, recipient_users=None,
+           trigged_by_user=None, activity=None, content_object=None):
     """
     Notify subscribing users of a new event. Key can be any kind of string,
     just make sure to reuse it where applicable.
@@ -53,6 +54,9 @@ def notify(message, key, target_object=None, url=None, filter_exclude={}, recipi
         url=url,
         filter_exclude=filter_exclude,
         recipient_users=recipient_users,
+        trigged_by_user=trigged_by_user,
+        activity=activity,
+        content_object=content_object,
     )
 
     # Notify channel subscribers if we have channels enabled
